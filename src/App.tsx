@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+//Imports for UI Components
+import HomePage from "./Components/HomePage";
+import ErrorPage from "./Components/ErrorPage";
+import LoginPage from "./Components/LoginPage";
+import AboutPage from "./Components/AboutPage";
+import ShopPage from "./Components/ShopPage";
+import ItemPage from "./Components/ItemPage";
+import BasketPage from "./Components/BasketPage";
+
+import ProtectedRoutes from "./Components/ProtectedRoutes";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <ProtectedRoutes />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "home",
+        element: <HomePage />,
+      },
+      {
+        path: "about",
+        element: <AboutPage />,
+      },
+      {
+        path: "shop",
+        element: <ShopPage />,
+        children: [
+          {
+            path: "item/:id",
+            element: <ItemPage />
+          }
+        ]
+      },
+      {
+        path: "basket",
+        element: <BasketPage />
+      }
+    ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App;
